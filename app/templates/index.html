@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interview Prep Mapper</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Interview&nbsp;Prep&nbsp;Mapper</h1>
+    <p class="tagline">Paste a job description — get a table of <strong>free</strong> courses to study for each requirement.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel form-panel">
+      <form id="prep-form">
+        <div class="field">
+          <label for="provider">AI engine</label>
+          <div class="row">
+            <select id="provider" name="provider">
+              {% for p in providers %}
+              <option value="{{ p.name }}">{{ p.label }}{% if not p.available %} — not detected{% endif %}</option>
+              {% endfor %}
+            </select>
+            <select id="model" name="model">
+              <option value="">Default model</option>
+            </select>
+            <input type="text" id="model-custom" class="hidden" placeholder="exact model id, e.g. qwen/qwen-2.5-72b-instruct" />
+          </div>
+          <p class="hint" id="provider-hint"></p>
+        </div>
+
+        <div class="field">
+          <label for="jd">Job description <span class="req">*</span></label>
+          <textarea id="jd" name="jd" rows="16" placeholder="Paste the job posting here…" required></textarea>
+        </div>
+
+        <div class="field">
+          <label for="instructions">Prep instructions <span class="opt">(optional)</span></label>
+          <input type="text" id="instructions" name="instructions"
+                 placeholder="e.g. I have 1 week to prepare" />
+          <p class="hint">Give a timeframe like “1 week”, “10 days”, or “a month” and each requirement gets a suggested study window.</p>
+        </div>
+
+        <button type="submit" id="go" class="primary">Map free courses</button>
+        <p class="hint">Degree and years-of-experience requirements are skipped — you can't study those away. Only free courses are listed.</p>
+      </form>
+    </section>
+
+    <section class="panel result-panel">
+      <div id="status" class="status idle">Paste a job description and click <strong>Map free courses</strong>.</div>
+
+      <div id="downloads" class="downloads hidden">
+        <h2>Download table</h2>
+        <div id="download-buttons" class="download-buttons"></div>
+      </div>
+
+      <div id="preview" class="preview hidden">
+        <h2 id="preview-title">Study plan</h2>
+        <p id="preview-guidance" class="guidance hidden"></p>
+        <div id="preview-table"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    Runs with <strong>Claude CLI</strong>, <strong>Gemini CLI</strong>, <strong>Ollama</strong> (open source), or <strong>OpenRouter</strong> (hosted). Mock engine works offline.
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
